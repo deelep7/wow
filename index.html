@@ -1,207 +1,95 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suprise💕</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container {
-            text-align: center;
-            z-index: 10;
-            position: relative;
-        }
-
-        h1 {
-            color: white;
-            font-size: 3.5rem;
-            margin-bottom: 2rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .question {
-            color: #ffe6f0;
-            font-size: 2rem;
-            margin-bottom: 3rem;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
-
-        .buttons {
-            display: flex;
-            gap: 2rem;
-            justify-content: center;
-            align-items: center;
-        }
-
-        button {
-            padding: 1.5rem 3rem;
-            font-size: 1.5rem;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
-        }
-
-        #yesBtn {
-            background: linear-gradient(135deg, #ff6b9d 0%, #c06c84 100%);
-            color: white;
-        }
-
-        #yesBtn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 12px 20px rgba(0,0,0,0.4);
-        }
-
-        #noBtn {
-            background: linear-gradient(135deg, #a8a8a8 0%, #7a7a7a 100%);
-            color: white;
-            position: relative;
-        }
-
-        .heart-balloon {
-            position: absolute;
-            font-size: 3rem;
-            animation: float 8s ease-in-out infinite;
-            opacity: 0.7;
-            z-index: 1;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0) translateX(0) rotate(0deg);
-            }
-            25% {
-                transform: translateY(-30px) translateX(20px) rotate(5deg);
-            }
-            50% {
-                transform: translateY(-60px) translateX(-20px) rotate(-5deg);
-            }
-            75% {
-                transform: translateY(-30px) translateX(15px) rotate(3deg);
-            }
-        }
-
-        .message {
-            display: none;
-            color: white;
-            font-size: 2rem;
-            text-align: center;
-            animation: fadeIn 1s ease-in;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .message h2 {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .message p {
-            margin: 1rem 0;
-            font-size: 1.8rem;
-        }
-
-        .heart-icon {
-            color: #ff6b9d;
-            animation: heartbeat 1.5s ease-in-out infinite;
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            10%, 30% { transform: scale(1.1); }
-            20%, 40% { transform: scale(1.05); }
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live Stream Player</title>
+<style>
+  :root { --bg:#0e1116; --panel:#171b22; --text:#e8ecf1; --muted:#8b95a5; --accent:#3b82f6; --err:#ef4444; --ok:#22c55e; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:16px; }
+  h1 { font-size:1.2rem; margin:8px 0 16px; }
+  .wrap { width:100%; max-width:960px; }
+  .player { position:relative; background:#000; border-radius:12px; overflow:hidden; aspect-ratio:16/9; }
+  video { width:100%; height:100%; display:block; background:#000; }
+  .status { margin-top:12px; padding:10px 14px; background:var(--panel); border-radius:8px; font-size:.9rem; color:var(--muted); }
+  .status.ok { color:var(--ok); } .status.err { color:var(--err); }
+  form { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+  input { flex:1 1 300px; padding:10px 12px; border-radius:8px; border:1px solid #2a313c; background:var(--panel); color:var(--text); font-size:.9rem; }
+  button { padding:10px 16px; border:0; border-radius:8px; background:var(--accent); color:#fff; font-weight:600; cursor:pointer; }
+  button.secondary { background:#2a313c; }
+  details { margin-top:12px; color:var(--muted); font-size:.85rem; }
+  details p { line-height:1.5; }
+</style>
 </head>
 <body>
-    <div class="container" id="questionContainer">
-        <h1>💖 Valentine's Day 💖</h1>
-        <p class="question">Will you be my Valentine?</p>
-        <div class="buttons">
-            <button id="yesBtn">Yes! 💕</button>
-            <button id="noBtn">No</button>
-        </div>
-    </div>
+<div class="wrap">
+  <h1>Live Stream Player</h1>
+  <div class="player"><video id="video" controls autoplay muted playsinline></video></div>
+  <div id="status" class="status">Loading…</div>
+  <form id="form">
+    <input id="url" type="url" required>
+    <button type="submit">Load</button>
+    <button type="button" id="reload" class="secondary">Reload</button>
+  </form>
+  <details>
+    <summary>Not playing?</summary>
+    <p>
+      • The server must allow cross-origin requests (CORS) and have a trusted certificate. For an IP-address HTTPS stream, open the URL once in your browser and accept the certificate warning first.<br>
+      • Some IPTV streams only work from inside the provider's network (e.g. your home ISP connection).<br>
+      • If the page is opened over https but the stream is plain http, browsers block it as mixed content.<br>
+      • The stream may require an account or token that this page doesn't supply.
+    </p>
+  </details>
+</div>
 
-    <div class="container message" id="messageContainer">
-        <h2>I knew you'd say YES! <span class="heart-icon">❤️</span></h2>
-        <p>I Love you soo muchhh</p>
-        <p><strong>Puntu</strong></p>
-        <p><strong>Muwahhhh</strong></p>
-        <p style="font-size: 3rem; margin-top: 2rem;">💕✨💖✨💕</p>
-    </div>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+<script>
+  const DEFAULT_URL = "https://202.166.192.204/iptvlivestream/hpremiumPAID/playlist.m3u8";
+  const video = document.getElementById("video");
+  const statusEl = document.getElementById("status");
+  const urlInput = document.getElementById("url");
+  let hls = null;
 
-    <script>
-        // Create floating heart balloons
-        function createHeartBalloon() {
-            const heart = document.createElement('div');
-            heart.className = 'heart-balloon';
-            heart.innerHTML = '🎈❤️';
-            heart.style.left = Math.random() * 100 + '%';
-            heart.style.top = Math.random() * 100 + '%';
-            heart.style.animationDelay = Math.random() * 5 + 's';
-            heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
-            document.body.appendChild(heart);
+  function setStatus(msg, cls) { statusEl.textContent = msg; statusEl.className = "status " + (cls || ""); }
+
+  function load(url) {
+    if (hls) { hls.destroy(); hls = null; }
+    setStatus("Connecting…");
+    if (window.Hls && Hls.isSupported()) {
+      hls = new Hls({ lowLatencyMode: true });
+      hls.loadSource(url);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        setStatus("Stream loaded. Playing…", "ok");
+        video.play().catch(() => setStatus("Press play to start (browser blocked autoplay).", ""));
+      });
+      hls.on(Hls.Events.ERROR, (_, data) => {
+        if (!data.fatal) return;
+        if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
+          setStatus("Network error – the stream is unreachable, blocked by CORS/certificate, or restricted to the provider's network. Retrying…", "err");
+          setTimeout(() => hls && hls.startLoad(), 4000);
+        } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+          setStatus("Media error – attempting recovery…", "err");
+          hls.recoverMediaError();
+        } else {
+          setStatus("Fatal error: " + data.details, "err");
+          hls.destroy();
         }
+      });
+    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = url;
+      video.addEventListener("loadedmetadata", () => { setStatus("Playing (native HLS).", "ok"); video.play().catch(()=>{}); }, { once: true });
+      video.addEventListener("error", () => setStatus("Could not load stream.", "err"), { once: true });
+    } else {
+      setStatus("This browser doesn't support HLS playback.", "err");
+    }
+  }
 
-        // Create 15 heart balloons
-        for (let i = 0; i < 15; i++) {
-            createHeartBalloon();
-        }
-
-        const noBtn = document.getElementById('noBtn');
-        const yesBtn = document.getElementById('yesBtn');
-        const questionContainer = document.getElementById('questionContainer');
-        const messageContainer = document.getElementById('messageContainer');
-
-        // Move "No" button when hovering or clicking
-        function moveNoButton() {
-            const maxX = window.innerWidth - noBtn.offsetWidth - 100;
-            const maxY = window.innerHeight - noBtn.offsetHeight - 100;
-            
-            const randomX = Math.random() * maxX;
-            const randomY = Math.random() * maxY;
-            
-            noBtn.style.position = 'fixed';
-            noBtn.style.left = randomX + 'px';
-            noBtn.style.top = randomY + 'px';
-        }
-
-        noBtn.addEventListener('mouseenter', moveNoButton);
-        noBtn.addEventListener('click', moveNoButton);
-
-        // Show message when "Yes" is clicked
-        yesBtn.addEventListener('click', () => {
-            questionContainer.style.display = 'none';
-            messageContainer.style.display = 'block';
-        });
-    </script>
+  urlInput.value = DEFAULT_URL;
+  document.getElementById("form").addEventListener("submit", e => { e.preventDefault(); load(urlInput.value.trim()); });
+  document.getElementById("reload").addEventListener("click", () => load(urlInput.value.trim()));
+  load(DEFAULT_URL);
+</script>
 </body>
 </html>
